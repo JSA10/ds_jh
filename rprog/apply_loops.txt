@@ -1,0 +1,176 @@
+*apply family
+
+useful set of looping functions, designed to apply other functions to lists or other 
+forms of data with multiple attributes 
+
+More compact than for and while loops, so better for interactive programming and 
+streamlining code. 
+
+lapply 
+#takes a list and applies a function to each element (unless directed otherwise with 
+tandem us of functions like split(). 
+Needs three arguments: data(list), function and any other relevant arguments (...)
+
+sapply is basically the same but will try to simplify the result, rather than returning a 
+list spread out along the page, it will try to return a vector if class the same and no 
+dimensions, or a matrix if more than one in each element of the list. Defaults to list 
+if can't work it out. 
+
+make use of 'anonymous' functions, which are functions you create on the fly that live 
+within an apply statement and aren't used afterwards. 
+
+e.g. 
+lapply(x, function(elt) elt[,1]) 	#function elt created to extract line 1 from table
+
+apply
+Use apply for data in a matrix 
+can specify whether apply function to rows or columns, if a summary stat applied then the 
+other dimension is collapsed (aggregated) and summary stat returned. 
+
+shortcuts exist for sum & mean and are recommended as speed up operation. 
+
+> str(apply)
+function (X, MARGIN, FUN, ...) 		
+#where X is an array, MARGIN integer for retained 'margin': 1 row, 2 col, FUN = function 
+ 
+apply shortcuts:
+rowSums = apply(x, 1, sum)
+rowMeans = apply(x, 1, mean) 
+colSums = apply(x, 2, sum)
+colMeans = apply(x, 2, mean)
+
+mapply
+allows application of a function over multivariate data
+so can apply to more than one set of tabular data, vector or list at a time. 
+
+> str(mapply)
+function (FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE)
+#mapply function itself needs to be flexible regarding number of arguments taken as the 
+arguments must match arguments needed for chosen function. e.g. rnorm(n, mean, sd)
+
+mapply is useful for vectorising functions #allowing you to apply function to multiple 
+variations of arguments 
+
+#e.g. if create a function that applies rnorm to create random noise:
+
+> noise <- function(n, mean, sd) { 
++ 	rnorm(n, mean, sd)
++	}
+
+#one set of arguments creates 5 observations with mean 1 and sd 2 
+> noise(5, 1, 2)
+[1] 2.4831198 2.4790100 0.4855190 -1.2117759 [5] -0.2743532
+
+#however if wan't to vectorize, this will just return 5 numbers again
+noise(1:5, 1:5, 2)
+[1] -4.2128648 -0.3989266 4.2507057 1.1572738 [5] 3.7413584
+
+#use mapply to instantly obtain a vectorised output keeping sd =2: 
+e.g. 1 vector of mean 1 
+2 vectors of mean 2 ... until 5 vectors of mean 5 is last returned
+> mapply(noise, 1:5, 1:5, 2) 
+[[1]]
+[1] 1.037658
+[[2]]
+[1] 0.7113482 2.7555797
+[[3]]
+[1] 2.769527 1.643568 4.597882
+[[4]]
+[1] 4.476741 5.658653 3.962813 1.204284
+[[5]]
+[1] 4.797123 6.314616 4.969892 6.530432 6.723254
+
+tapply 
+used to apply functions to subsets of a vector (not clearly linked to t) 
+
+> str(tapply)
+function (X, INDEX, FUN = NULL, ..., simplify = TRUE)
+#X is a vector of numeric objects, INDEX has same length but contains factors identifying
+each segment e.g. 1,2 = male,female. If don't simplify result a list is returned (lapply)
+
+e.g. group means
+x <- c(rnorm(10), runif(10), rnorm(10, 1)) 
+>f<-gl(3,10)
+>f
+[1]11111111112222222222333 [24]3333333
+Levels: 1 2 3
+> tapply(x, f, mean)
+123 0.1144464 0.5163468 1.2463678
+
+or with grouped range function: 
+> tapply(x, f, range) 
+$‘1‘
+[1] -1.097309 2.694970
+$‘2‘
+[1] 0.09479023 0.79107293
+$‘3‘
+[1] 0.4717443 2.5887025
+
+split 
+not an apply function but very useful function to use in tandem 
+enables auto segmentation of vectors, matrix and data frames by groups identified by 
+a factor or list of factors. 
+
+> str(split)
+function (x, f, drop = FALSE, ...)
+· x is a vector (or list) or data frame
+· f is a factor (or coerced to one) or a list of factors
+· drop indicates whether empty factors levels should be dropped
+
+split commonly followed by lapply 
+
+NOTE: tapply better for vectors but split comes into it's own for more complicated 
+data sets
+
+> library(datasets) 
+> head(airquality)
+
+> s <- split(airquality, airquality$Month)
+> lapply(s, function(x) colMeans(x[, c("Ozone", "Solar.R", "Wind")])) 
+$‘5‘
+Ozone Solar.R Wind
+NA NA 11.62258 
+$‘6‘
+Ozone Solar.R Wind
+NA 190.16667 10.26667 
+$‘7‘
+Ozone Solar.R Wind
+NA 216.483871 8.941935
+
+> sapply(s, function(x) colMeans(x[, c("Ozone", "Solar.R", "Wind")], na.rm = TRUE))
+
+splitting on more than one level 
+#rather than using interaction function to combine two factors and return separate 
+elements for every possible combination 
+
+> x <- rnorm(10) 
+>f1<-gl(2,5) 
+>f2<-gl(5,2) 
+>f1
+[1]1111122222 Levels: 1 2
+>f2
+[1]1122334455 Levels:12345
+> interaction(f1, f2)
+[1] 1.1 1.1 1.2 1.2 1.3 2.3 2.4 2.4 2.5 2.5 
+10 Levels: 1.1 2.1 1.2 2.2 1.3 2.3 1.4 ... 2.5
+
+#can: 
+> str(split(x, list(f1, f2))) List of 10
+$ 1.1: num [1:2] -0.378 0.445 $ 2.1: num(0)
+$ 1.2: num [1:2] 1.4066 0.0166 $ 2.2: num(0)
+$ 1.3: num -0.355
+$ 2.3: num 0.315
+$ 1.4: num(0)
+$ 2.4: num [1:2] -0.907 0.723 $ 1.5: num(0)
+$ 2.5: num [1:2] 0.732 0.360
+
+#drop empty levels
+> str(split(x, list(f1, f2), drop = TRUE)) 
+List of 6
+$ 1.1: num [1:2] -0.378 0.445 
+$ 1.2: num [1:2] 1.4066 0.0166 
+$ 1.3: num -0.355
+$ 2.3: num 0.315
+$ 2.4: num [1:2] -0.907 0.723 
+$ 2.5: num [1:2] 0.732 0.360
+

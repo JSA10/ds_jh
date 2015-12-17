@@ -1,0 +1,90 @@
+Getting and cleaning data
+
+Components of tidy data 
+
+Tidy data 
+
+For tidy data you should have four things: 
+
+Raw data file 
+Tidy data file
+Code book with each variable and its values (metadata) 
+Method: exact and explicit recipe used to go from step 1 to x 
+
+Raw data has not:
+
+Had software run on it
+Had any of the numbers in the dataset manipulated 
+Had any data removed 
+Had any data summarised 
+
+Tidy data: 
+
+Each variable should be in one col
+Each observation of each variable in a different row 
+One table for each 'kind' of variable
+Multiple tables should have a key column that can join them 
+
+TIPS: 
+Include a row at top with file names
+Make variable names readable, rather than acronyms 
+In general data should be saved in one file per table 
+
+Code book:
+
+Include: 
+
+Info about variables not included in tidy data set
+Info about summary choices made 
+Info about experimental survey design
+
+Word/text file 
+Study design section with thorough description of data collection 
+
+Instruction list: 
+
+Ideally a computer script 
+
+Input = raw data 
+Output = tidy, processed data 
+No parameters in script 
+
+#Won't be possible to script every step so use comment feature to narrate the gaps 
+
+working directories 
+
+#can set relative by using:
+setwd(".../")		#sets wkd as one level up from current 
+#as well as the absolute: 
+setwd("/Users/jeromeahye/Documents/DataScience")
+
+checking for and creating file directories 
+file.exists("directoryname") 		#checks if dir exists 
+dir.create("directoryname")			#creates new dir if doesn't exist 
+
+Can use in tandem: 	 
+if (!file.exists("data")) {			 
+	dir.create("data")
+}
+#NOTE: need to use inverse logic, if file exists the command to dir.create will be false 
+and nothing will happen, if it doesn't exist the input will be true and dir.create will
+create new file. 
+
+download.file()			#command used to download files from the internet into R 
+parameters(url, destfile, method) 
+
+#Need to find link address for specific exportable files and bring that into R. 
+
+fileurl <- "https://..."
+download.file(fileurl, destfile = ".data/datafile.csv", method = "curl") 
+list.files("./data") 
+dateDownloaded<- date()		
+
+NOTE: for http you can use download.file(), for https on windows might be ok but on mac 
+/ linux need to include "method = curl". Important to keep track of the date downloaded 
+and beware of bigger files that you don't want to re-download each time your code runs.  
+
+
+
+
+ 

@@ -1,0 +1,44 @@
+WK4
+
+str() 		#RP thinks str is the most useful function in all R 
+
+Alternative / complement to summary and can apply to all objects including functions.
+
+str(str) 
+
+simulation
+
+use probability distributions to generate random numbers and simulate distributions. 
+
+can use almost any type of distribution, there are four functions for each one: 
+
+r 	e.g. 	rnorm		random numbers generated 
+d 			dnorm		density function generated 
+p			pnorm		probability distribution
+q			qnorm		quantile function 
+
+the args vary by the type of distribution e.g. rnorm(n, mean, sd) 
+
+NOTE: computers can simulate random numbers but they are never truly random. 
+To reproduce the function set.seed(1) is needed. Where 1 is an arbitrary number
+that signifies where the sequence to generate the random numbers started. If this is 
+included then the exact same random numbers can be replicated at another time or by 
+someone else. 
+
+sample function used to sample randomly from a preexisting data set 
+#specified set of (scalar) objects
+
+> set.seed(1)
+> sample(1:10, 4)
+[1]3 4 5 7
+> sample(1:10, replace = TRUE) ## Sample w/replacement
+[1]2 9 7 8 2 8 5 9 7 8
+
+Summary
+· Drawing samples from specific probability distributions can be done with r* functions
+· Standard distributions are built in: Normal, Poisson, Binomial, Exponential, Gamma, etc.
+· The sample function can be used to draw random samples from arbitrary vectors
+· Setting the random number generator seed via set.seed is critical for reproducibility
+
+
+

@@ -1,0 +1,64 @@
+CLI 
+
+#structure of command line 
+command flags arguments 
+
+pwd
+clear
+ls 
+ls -a #show hidden files and folders
+ls -al #list details of hidden 
+
+-a and -l are flags 
+
+cd #goes to home dir 
+cd .. #moves up one dir
+mkdir 
+mkdir Documents #create new Documents dir 
+touch #creates empty file 
+cp #copy 
+cp test_file Documents 
+
+cp -r #copy contents of dir (-r = recursive) 
+cp -r Documents More_Documents #move Documents folder to More
+
+rm 
+rm -r #removes whole dirs 
+
+mv #move file
+mv new_file Documents 
+mv #can change name of file if move to file with new name 
+
+echo #prints arguments you provide 
+
+date 
+
+Git
+
+~ jeromeahye$ git config --global user.name "JSA10"
+~ jeromeahye$ git config --global user.email "jerome.ahye@gmail"
+$ git config --list
+$ exit 
+
+First step: add files you want to track with version control to Git Index
+
+git add .  #adds all new files 
+git add -u #updates tracking for files that changed names or were deleted 
+git add -A #does both of the above 
+
+Then commit to git repository
+
+git commit -m "message" #useful description of changes
+#still a local action 
+
+git push  #pushes changes made to remote repository (github) 
+
+git checkout -b branchname #create new branch of shared project for you to work on
+git branch #checks the branch you are on 
+git checkout master #switch back to master branch 
+
+#use pull to merge changes back to other branch / repo 
+
+
+
+

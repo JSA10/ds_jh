@@ -1,0 +1,330 @@
+Rprog
+
+Control structures: Used to control the flow of operations, depend on runtime conditions(?)
+Used when writing functions or longer expressions, not when working in command line
+
+if, else #tests condition 
+for  #repeats action (executes loop) a fixed amount of time 
+while  #execute loop while a condition is true  
+repeat  #execute an infinite loop 
+break  #breaks execution of a loop 
+next  #skips an iteration of a loop  
+return  #exit a function 
+
+if,else
+#can check whether one, two or more conditions are true 
+
+if(condition) { 
+	## do something 
+} else { 
+	## do something else 
+} 
+
+if(conditon)  { 
+	## do something
+} else if {
+	## do something different 
+} else { 
+	## do something different 
+} 	
+	 
+#else always last one 
+
+#More than one way to construct if, else. 
+
+Can either lead with if condition and outline options for corresponding effect, 
+or start with affected variable as the LHS assigned variable and include conditional 
+variable within the if, else statment as its assignment. The output is still the same. 
+(Slide 4/14) 
+
+for loop 
+#start with an index variable e.g. i, which is often a series of integers 
+and iterates over each one, applying a command to each one. 
+
+x <- c("a", "b", "c", "d")
+for(i in 1:4) {  
+	print(x[i])
+} 
+OR 
+for(i in seq_along(x) { 
+	print(x[i]) 
+} 
+#seq_along generates integer sequence of same length as vector x ... great for function 
+when len of x can be variable. 
+OR
+for(letter in x) { 
+	print(letter)
+} 
+#letter is an arbitrary variable 
+
+Nested for loops 
+
+e.g. x <- matrix(1:6, 2, 3) 
+
+for(i in seq_len(nrow(x)) {
+	for(i in seq_len(ncol(x)) { 
+		print(x[i, j])
+	}
+}
+WARNING: Nesting more than 2 or 3 levels is often very difficult to understand
+
+While loops
+#test condition, if true then execute loop body. test again & repeat until condition false
+#While loops are easy to understand but 
+#WARNING can result in infinite loops by mistake, sometimes safer to use for loops that 
+have a hard limit, particularly when code is complex 
+
+count <- 0 
+while(count < 10) { 
+	print(count) 
+	count <- count + 1
+} 
+
+while can be combined with logical statements 
+
+z <- 5 
+
+while(z >= 3 && <= 10) {
+	print(z)
+	coin <- rbinom(1, 1, 0.5)
+	
+	if(coin ==1) {  ##random walk
+			z <- z + 1
+		} else { 
+			z <- z - 1
+		}
+}
+#in this example it is less clear how long the while loop will run for, as the value of z
+will zigzag up and down until it hits 2 or 10. 
+#NOTE expressions always evaluated from left to right 
+
+Repeat
+#Repeat initiates infinite loop, only way to break is using break function. Not commonly 
+used but could be useful in an optimisation function, where you don't know how many 
+iterations it will take to get close enough to desired or optimal answer. 
+
+WARNING: example below is fine in theory, in practise it might be safer to use a for loop as the 
+answers may fluctuate and not converge: 
+
+x0 <- 1
+tol <- 1e-8
+
+repeat { 
+	x1 <- computeEstimate() 	#computeEstimate = a made up function 
+	
+	if(abs(x1 - x0) < tol) { 
+		break 
+	} else {
+		x0 <- x1
+	}
+}
+
+next, return
+#next used to skip an iteration within a loop 
+
+for(i in 1:100) {
+	if(i <= 20) {
+		##skip first 20 iterations
+		next
+	}
+	## Do something here 
+} 
+#return signals a function should exit and return a given value 
+
+control structures covered here primarily useful for writing programs, for command line 
+interactive work the *apply family are more useful 
+
+First R function
+
+#R functions used to simplify and abstract code, automating repetitive tasks and making it 
+easier for yourself and others to focus on most important things 
+Involve assignment using the function object
+
+above10 <- function(x) {
+		use <- x > 10	#applies logical condition to segment vector x
+		x[use]			#subsets vector based on above condition
+}
+
+above <- function(x, n) { 
+		use <- x > n	#enables flexibility regarding condition 	
+		x[use]
+}
+
+#can do the same as above but use argument n = 10 as default value if that number 
+has significance. User then has option to change n or just run above(x) without specifying 
+new n
+
+#an example with a for loop
+
+columnmean <- function(x) {
+		nc <- ncol(x)						#assigns value to number of columns in df
+		means <- numeric(nc)				#creates empty numeric vector to store means
+		for(i in 1:nc) {					#loops through columns up to last one 
+				means[i] <- mean(x[, i])	#uses mean function on each column
+		}
+		means								#returns completed means vector
+} 
+
+If use this function on a data set with NA values e.g. built-in air quality one, no mean 
+calculated for cols with NA values. Can amend function to remove automatically NAs, 
+calculating the mean of only the observed values using removeNA function: 
+
+columnmean <- function(x, removeNA = TRUE) {	#added removeNA argument 
+		nc <- ncol(x)						
+		means <- numeric(nc)				
+		for(i in 1:nc) {					
+				means[i] <- mean(x[, i], na.rm = removeNA)	#apply to each column 
+		}
+		means								
+} 
+
+Functions 
+
+#Functions are treated as first class objects, so they can be passed as arguments to 
+other functions or nested within another function. Remember last expression is the 
+function body is one that will be evaluated. 
+
+#Functions have arguments, which when used can be matched either positionally or by name. 
+In general it is not good practise to mess about with the order of arguments as this can 
+lead to confusion. An exception is when there are a number of arguments to a function and 
+a number of them have default values assigned e.g. lm; in this case if you wanted to just 
+change one or two, it makes sense to just pull those out by name. 
+
+#they can also be partially matched, which is better for saving time in interactive work, 
+allowing you to call part of the name rather than typing out long names
+
+Order of function matching: 
+1 Check for exact match
+2 Check for partial match
+3 Check for positional match 
+
+Lazy evaluation 
+
+#R only evaluates arguments to functions as needed. If a function specifies an argument 
+but the body doesn't use it, then it will not make a difference to the output if included
+or not each time function is used. 
+
+#Functions are evaluated in order, so an error message will only be returned once 
+encountered, meaning everything that came before the error will run as normal 
+
+'...' used to indicate variable number of arguments
+#often used when extending another function that contains many arguments that you don't 
+want to copy 
+
+myplot <- function(x,y, type = "l", ...) {
+		plot(x, y, type = type, ...)
+}
+
+OR used in generic functions, allowing extra arguments to be passed as needed
+
+mean
+function (x, ...)
+UseMethod("mean") 
+
+#generic functions don't do anything, but dispatch methods and allow for extra arguments
+
+OR ... is necessary when number of arguments cannot be known in advance 
+
+args(paste) 
+function(..., sep = " ", collapse = NULL) 
+#... comes before the two default arguments as first set of arguments are the objects 
+that are going to be pasted together. 
+#same with cat function 
+
+#NOTE: Arguments coming after the ... must be named explicitly and cannot be partially 
+matched. 
+
+Scoping rules <- symbol binding 
+example: You define a new function that has the same assignment as a existing R package 
+e.g. lm(x). How does R know which one to run? 
+if examine search() function you see that R's first search is within the global environment
+you've created and then it goes through the preexisting packages e.g. stats ... base 
+package is always last. 
+™Therefore the order matters. When use library(package) feature, the named packages are 
+promoted to package 2 in the list
+#NOTE: R has separate namespaces for functions and non-functions. So possible to have 
+an object and a function with the same name
+ 
+#Scoping rules determine how a value is bound to a free variable in a function 
+#Lexical (static) scoping differentiates R from S and others that use dynamic scoping
+
+R packages up different levels of symbol / value pairs into 'environments'. These 
+environments contain all the objects that have been defined together at different times. 
+Your personal workspace is your global environment and they operate in a parent child 
+model, where parent environments can link multiple child environments. 
+
+Lexical scoping means that when a free variable is referenced in a function that has not 
+been explicitly defined in that environment, R will continue to search up the chain through
+linked parent environments until it hits the global environment and then it will 
+cycle down through installed packages. If it goes past the base package and hits the 
+empty environment and still has not found the free variable value it will throw an error.
+
+Why does lexical scoping matter? 
+It has impact on how functions are defined and ultimate results. Lexical scoping allows 
+for functions to be defined within functions, something other languages do not. This 
+increases both flexibility, power and complexity. 
+make.power examples illustrated two functions within one. The first assigns a value to 
+n which is used within an embedded function which takes a second variable x and * by n 
+to achieve a power effect. 
+
+Differences between lexical and dynamic scoping: In certain cases both will return 
+different results with the same code. In an example RP ran through, Lexical scoping takes 
+it's values from the environment where a variable was defined, in this case the global
+environment. However dynamic took it from the environment where it was called, in this case
+within the function. The variable then had differen values which impacted final value.  
+
+Other lexical scoping languages: Perl, Python, Common lisp
+
+Consequences to lexical scoping are that all objects have to be stored in memory and 
+must have direct pointers, which can limit the size of datasets and the increase in 
+complexity is both a good and bad thing. 
+
+Optimisation example. Essentially demonstrating how functions 
+can be combined that support each other by supplying different types of variables, 
+whether that be the data, parameters or fixed variables. 
+Optimise functions interesting and worthy of further exploration: optim, optimise & ...
+
+Lexical scoping summary 
+objective functions can be 'built' which contain all necessary data for evaluating the 
+function 
+No need to carry round long argument lists - useful for interactive and exploratory work 
+Code can be simplified and cleaned up 
+Reference: Robert Gentleman and Ross Ihaka (2000), "Lexical scope and Statistical 
+computing" Journal of computational graphical statistics. 
+
+Coding standards
+
+#always use a text editor and text files - ease of sharing and replicability
+#always indent code by at least 4 spaces - ease of reading and comprehension 
+#limit RHS margin to around 80 spaces - condensed code is easier to read and forces you to 
+rethink overlong functions like for loops. 
+#keep functions logical and limited to just one job at a time. Balance between too long 
+which is hard to decipher and debug and too small which is a waste of time. 
+
+Dates and times
+
+Have special functions in R that allow for numeric or statistical calculations
+Dates use Date class
+Times use POSIXlt or POSIXct (lt = list, with date and time components) (ct = large integer 
+number)
+Character strings can be coerced to Date/Time classes using strptime function  or 
+as.Date, as.POSIXlt, as.POSIXct 
+#NOTE plotting functions will recognise Date/TIme classes and format to match. EXPERIMENT
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+ 
+

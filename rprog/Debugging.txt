@@ -1,0 +1,61 @@
+Debugging
+
+Three levels of error messages: 
+
+message  - generic notification produced by message function - execution continues 
+warning	- something wrong, not fatal, e.g. unexpected result - warning after execution  
+error - fatal problem occurs, execution stops. Produced by stop function. 
+
+condition - can create your own condition, warning that something unexpected can occur 
+
+e.g.
+printmessage2 <- function(x) { 
+	if(is.na(x))
+		print("x is a missing value!") 
+	else if(x > 0)
+		print("x is greater than zero")
+	else
+		print("x is less than or equal to zero") invisible(x)
+}
+
+is.na can be used as logical test to remove impact of missing values
+
+Steps for finding solutions: 
+
+How do you know that something is wrong with your function?
+· What was your input? How did you call the function?
+· What were you expecting? Output, messages, other results?
+· What did you get?
+· How does what you get differ from what you were expecting?
+· Were your expectations correct in the first place?
+· Can you reproduce the problem (exactly)?
+
+The primary tools for debugging functions in R are
+· traceback: prints out the function call stack after an error occurs; does nothing if 
+there’s no error
+· debug: flags a function for “debug” mode which allows you to step through execution of 
+a function one line at a time
+· browser: suspends the execution of a function wherever it is called and puts the 
+function in debug mode
+· trace: allows you to insert debugging code into a function a specific places
+· recover: allows you to modify the error behavior so that you can browse the function 
+call stack
+
+These are interactive tools specifically designed to allow you to pick through a function. 
+There’s also the more blunt technique of inserting print/cat statements in the function.
+
+WARNING: Getting sloppy with code and relying on debugging tools are bad habits to develop
+Think through the code you are going to write properly first and then if there are 
+still problems can use them. 
+
+##test debugging tools with larger functions or when having persistent problems. 
+
+Summary
+· There are three main indications of a problem/condition: message, warning, error - 
+onlyanerrorisfatal
+· When analyzing a function with a problem, make sure you can reproduce the problem, 
+clearly state your expectations and how the output differs from your expectation
+· Interactive debugging tools traceback, debug, browser, trace, and recover can be used 
+to find problematic code in functions
+· Debugging tools are not a substitute for thinking!
+

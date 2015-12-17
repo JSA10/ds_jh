@@ -1,0 +1,41 @@
+Reading and writing data 
+
+read.table 			write.table			#tabular data
+read.csv								#tabular data
+readLines			writeLines			#lines of text file 
+source				dump 				#r code files
+dget				dput				#r code files 
+load				save 				#saved workspaces 
+unserialize 		serialize			#single R objects in binary form
+
+
+read.table args (file, header = T/F, sep = ", :", colClasses = 'numeric' | variable, 
+nrows = 100, comment.char , skip = 10, stringsAsFactors) 
+
+Using arguments that specify details of dataset isn't normally necessary for small to 
+medium file sizes but will save time and memory with large datasets. (R stores objects 
+in a computer's physical memory) 
+
+Particularly useful for large datasets: 
+#NOTE: Read help page for read.table
+set comment.char = " " if no #comments in document
+make a rough calculation of memory each tabular object x 8bytes roughly. 
+e.g. 1.5mill rows, 120 columns: 
+
+= 15000000 * 120 * 8 
+= 1440000000 bytes
+= 1440000000 / 220 bytes/MB
+= 1,373.29 MB
+= 1.34 GB
+
+colClasses - specifying the column classess stops R having to figure out by it's self, 
+which can half the run time. TIP: Run a smaller subset of the data first, assign returned classes to a variable and 
+pass that into the read statement for larger file. 
+
+initial <- read.table("datatable.txt", nrows = 100)	#create initial segment to test
+classes <- sapply(initial, class) 					#use sapply check class for each col
+tabAll <- read.table("datatable.txt", colClasses = classes) 	#reads classes into R 
+
+Setting nrows helps with memory usage. Mild overestimate is ok. 
+
+
