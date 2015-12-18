@@ -1,0 +1,47 @@
+Data Scientists Toolbox 
+(1) an introduction to the key ideas behind working with data in a scientific way that will produce new and reproducible insight, 
+(2) an introduction to the tools that will allow you to execute on a data analytic strategy, from raw data in a database to a completed report with interactive graphics, and 
+(3) on giving you plenty of hands on practice so you can learn the techniques for yourself.
+
+
+Git commands
+
+#let Git know to track new files 
+git add . #adds all files in current dir 
+git add -u #updates all files 
+git add -A #does both 
+
+#once added can commit 
+git commit -m #"message - describe changes", still local repo 
+git push #pushes to github 
+
+#branches - create new version of same doc so don't edit version used by others 
+git checkout -b branchname #create new branch 
+git branch #see what branch your on 
+git checkout master #switch back to master branch 
+
+#pull merges changes to other branch / repo. Unique feature for github 
+#sends request to merge to owner who can approve or not 
+
+help.github.com or stackoverflow when needed 
+
+Rmarkdown .rmd 
+## creates secondary heading (big) 
+###creates tertiary heading (smaller)
+
+#unordered lists
+* first item in list
+* second
+* third 
+
+#help 
+//daringfireball.net/projects/markdown/ 
+R Studio resource 
+
+Rtools - building R packages 
+cran.../bi/windows/Rtools
+#need version corresponding to your R version 
+
+
+
+
